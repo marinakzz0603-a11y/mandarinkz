@@ -2,51 +2,47 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
+<meta name="theme-color" content="#ebedf0">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Калькулятор SMM-метрик</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
-:root{--bg:#05070f;--glass:rgba(255,255,255,.07);--glass2:rgba(255,255,255,.05);--line:rgba(255,255,255,.14);--ink:#eef0ff;--muted:#a9b0d6;--accent:#9db1ff;--hi:#ffd166;--on:#05070f;
+:root{--bg:#ebedf0;--plaque:#dde0e5;--ink:#12151c;--muted:#5d6572;--navy:#2b4bb5;--panel:#a9aeb8;--line:#c3c8d1;--warn:#9a5b00;color-scheme:light;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-:root[data-theme="light"]{--bg:#e9ecfa;--glass:rgba(255,255,255,.65);--glass2:rgba(255,255,255,.5);--line:rgba(15,22,51,.14);--ink:#0f1633;--muted:#4d5473;--accent:#2447d6;--hi:#b45f00;--on:#fff}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *,*::before,*::after{box-sizing:border-box}
-body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;overflow-x:hidden}
-.blobs{position:fixed;inset:0;overflow:hidden;z-index:0;pointer-events:none}
-.blobs i{position:absolute;filter:blur(70px);opacity:.5;border-radius:42% 58% 60% 40%/45% 40% 60% 55%;animation:f 18s ease-in-out infinite alternate}
-.blobs i:nth-child(1){width:330px;height:330px;background:#3f5bff;top:-90px;left:-100px}
-.blobs i:nth-child(2){width:290px;height:290px;background:#a246ff;top:38%;right:-120px;animation-duration:23s}
-.blobs i:nth-child(3){width:270px;height:270px;background:#12b8a6;bottom:-90px;left:10%;animation-duration:27s}
-@keyframes f{to{border-radius:60% 40% 35% 65%/55% 60% 40% 45%;transform:translate(40px,60px) scale(1.15)}}
-@media(prefers-reduced-motion:reduce){.blobs i{animation:none}}
-main{position:relative;z-index:1;max-width:520px;margin:0 auto;padding:20px 16px 32px}
-h1{font-size:26px;margin:0 0 4px;letter-spacing:-.01em}
+body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+main{max-width:520px;margin:0 auto;padding:20px 16px 32px}
+h1{color:var(--navy);font-size:28px;line-height:1.15;margin:0 0 6px;letter-spacing:-.02em}
 .sub{color:var(--muted);margin:0 0 20px}
-h2{font-size:15px;color:var(--accent);margin:24px 0 10px;font-weight:600}
-.glass,.panel,.m{background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 10px 32px rgba(0,0,0,.35)}
+h2{font-size:15px;color:var(--navy);margin:24px 0 10px;font-weight:700}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.panel{padding:14px;border-radius:24px;background:var(--glass2)}
+.panel{padding:14px;border-radius:24px;background:var(--panel)}
+.panel label{color:#20262f}
 label{display:block;font-size:13px;color:var(--muted)}
 .wide{grid-column:1/-1}
-input{width:100%;margin-top:4px;padding:11px 12px;font-size:16px;color:var(--ink);background:var(--glass);border:1px solid var(--line);border-radius:14px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:inset 0 1px 0 rgba(255,255,255,.1)}
-input:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(157,177,255,.35)}
-button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+input{width:100%;margin-top:4px;padding:11px 14px;font-size:16px;color:var(--ink);background:#fff;border:1.5px solid var(--line);border-radius:999px}
+input:focus-visible{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(43,75,181,.28)}
+button:focus-visible{outline:3px solid var(--navy);outline-offset:3px}
 .res{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.m{border-radius:20px;padding:14px}
-.m svg{width:20px;height:20px;stroke:var(--hi);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.m .n{font-size:13px;color:var(--muted);margin-top:4px}
-.m .v{font-size:22px;font-weight:700;color:var(--hi);line-height:1.2}
+.m{position:relative;background:var(--plaque);border-radius:22px;padding:14px}
+.m .ic{font-size:20px;margin-right:6px;vertical-align:1px}
+.empty{grid-column:1/-1;color:var(--muted);margin:0;padding:6px 2px}
+.m .n{display:inline-block;padding:3px 10px;border:1.5px solid var(--navy);border-radius:999px;background:#fff;color:var(--navy);font-size:12px;font-weight:600}
+.m .v{white-space:nowrap;font-size:clamp(20px,6vw,26px);font-weight:800;color:var(--navy);line-height:1.2;margin-top:10px}
 .m .h{font-size:12px;color:var(--muted);margin-top:4px}
-button{margin-top:18px;width:100%;padding:14px;font-size:16px;font-weight:600;border:0;border-radius:999px;background:linear-gradient(135deg,var(--accent),#c3a2ff);color:var(--on);cursor:pointer;box-shadow:0 8px 24px rgba(120,140,255,.35),inset 0 1px 0 rgba(255,255,255,.5)}
-#sum{font-size:15px;line-height:1.55}
+#sum{background:var(--navy);color:#fff;font-size:15px;line-height:1.55}
+#sum .h{color:#d8dff5}
+.warn{color:var(--warn);font-size:13px;margin:10px 0 0}
+button{margin-top:18px;width:100%;padding:14px;font-size:16px;font-weight:700;border:0;border-radius:999px;background:var(--navy);color:#fff;cursor:pointer}
+button.ghost{background:transparent;color:var(--navy);border:1.5px solid var(--navy);margin-top:10px}
 .foot{margin-top:18px;text-align:center;font-size:13px;color:var(--muted)}
-@media(max-width:360px){.grid,.res{grid-template-columns:1fr}}
+@media(max-width:330px){.grid,.res{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<div class="blobs" aria-hidden="true"><i></i><i></i><i></i></div>
 <main>
-<h1>Калькулятор SMM-метрик</h1>
+<h1>Калькулятор <span style="white-space:nowrap">SMM-метрик</span></h1>
 <p class="sub">Введите цифры за период и сразу получите ER, CTR, CPL и ROMI с пояснениями.</p>
 <h2>Данные</h2>
 <div class="grid panel">
@@ -58,15 +54,17 @@ button{margin-top:18px;width:100%;padding:14px;font-size:16px;font-weight:600;bo
 <label>Затраты, ₽<input id="cost" inputmode="decimal" placeholder="30000"></label>
 <label>Выручка, ₽<input id="rev" inputmode="decimal" placeholder="90000"></label>
 </div>
-<h2>Результаты</h2>
-<div class="res" id="out" aria-live="polite"></div>
+<p class="warn" id="warn" role="status"></p>
 <h2>Вывод</h2>
 <div class="m" id="sum"></div>
+<h2>Результаты</h2>
+<div class="res" id="out" aria-live="polite"></div>
 <button id="copy" type="button">Копировать результат</button>
+<button id="clear" type="button" class="ghost">Очистить данные</button>
 <p class="foot">Блог про SMM: @mandarinkz</p>
 </main>
 <script>
-var I={heart:'<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/>',users:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>',cur:'<path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/>',ok:'<path d="M20 6L9 17l-5-5"/>',coin:'<path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',eye:'<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>',up:'<path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/>'};
+var EM={'ER по охвату':'❤️','ER по подписчикам':'👥','CTR по охвату':'👆','Конверсия в заявку':'✅','CPL':'💰','CPC':'🖱️','CPM':'👁️','ROMI':'📈'};
 var P=function(x){return x.toLocaleString('ru-RU',{maximumFractionDigits:2})+' %'};
 var R=function(x){return x.toLocaleString('ru-RU',{maximumFractionDigits:2})+' ₽'};
 var M=[
@@ -80,13 +78,21 @@ var M=[
 ['ROMI','up',function(d){return (d.rev-d.cost)/d.cost*100},P,['rev','cost'],'0 % означает «вышли в ноль»']
 ];
 var ids=['reach','subs','eng','clicks','leads','cost','rev'],out=document.getElementById('out'),last=[];
-function read(){var d={};ids.forEach(function(k){var v=parseFloat(document.getElementById(k).value.replace(',','.'));d[k]=isNaN(v)?null:v});return d}
-function calc(){var d=read();last=[];var val={};out.innerHTML='';M.forEach(function(m){
-var ok=m[4].every(function(k){return d[k]!==null})&&d[m[4][0]]!==0&&d[m[4][1]]!==0;
+var neg=false,DEN={'ER по охвату':'reach','ER по подписчикам':'subs','CTR по охвату':'reach','Конверсия в заявку':'clicks','CPL':'leads','CPC':'clicks','CPM':'reach','ROMI':'cost'};
+function read(){var d={};neg=false;ids.forEach(function(k){var v=parseFloat(document.getElementById(k).value.replace(/[\s\u00a0\u202f]/g,'').replace(',','.'));if(v<0){neg=true;v=NaN}d[k]=isNaN(v)?null:v});return d}
+function warn(d){var w=[];if(neg)w.push('Числа не могут быть отрицательными.');
+if(d.leads!==null&&d.clicks!==null&&d.leads>d.clicks)w.push('Заявок больше, чем кликов.');
+if(d.clicks!==null&&d.reach!==null&&d.clicks>d.reach)w.push('Кликов больше охвата.');
+if(d.eng!==null&&d.reach!==null&&d.eng>d.reach)w.push('Взаимодействий больше охвата.');
+document.getElementById('warn').textContent=w.length?'Проверьте цифры: '+w.join(' '):''}
+function save(){try{var o={};ids.forEach(function(k){o[k]=document.getElementById(k).value});localStorage.setItem('smmcalc.v1',JSON.stringify(o))}catch(e){}}
+function restore(){try{var o=JSON.parse(localStorage.getItem('smmcalc.v1')||'{}');ids.forEach(function(k){if(o[k])document.getElementById(k).value=o[k]})}catch(e){}}
+function calc(){var d=read();warn(d);save();last=[];var val={};out.innerHTML='';if(ids.every(function(k){return d[k]===null})){out.innerHTML='<p class="empty">Введите данные, и здесь появятся метрики.</p>';concl(val);return d}M.forEach(function(m){
+var ok=m[4].every(function(k){return d[k]!==null})&&d[DEN[m[0]]]!==0;
 if(m[0]==='ROMI')ok=d.rev!==null&&d.cost!==null&&d.cost!==0;
 var v=ok?m[3](m[2](d)):'—';if(ok){last.push(m[0]+': '+v);val[m[0]]=m[2](d)}
 var el=document.createElement('div');el.className='m';
-el.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true">'+I[m[1]]+'</svg><div class="n">'+m[0]+'</div><div class="v">'+v+'</div><div class="h">'+m[5]+'</div>';out.appendChild(el)});
+el.innerHTML='<div class="n">'+m[0]+'</div><div class="v"><span class="ic" aria-hidden="true">'+EM[m[0]]+'</span>'+v+'</div><div class="h">'+m[5]+'</div>';out.appendChild(el)});
 concl(val);return d}
 function concl(v){var t=[],f=function(x){return x.toLocaleString('ru-RU',{maximumFractionDigits:1})},r=v['ROMI'];
 if(r!==undefined)t.push(r<0?'Затраты пока выше выручки: ROMI '+f(r)+' %. Начните с цены заявки и конверсии в продажу.':r===0?'Вы вышли в ноль: ROMI 0 %.':'Реклама окупилась: ROMI '+f(r)+' %.');
@@ -101,14 +107,15 @@ if(!t.length){el.textContent='Введите данные, и здесь поя�
 el.innerHTML=t.join(' ')+'<div class="h">Ориентиры условные: зависят от ниши и площадки.</div>';
 last.push('Вывод: '+t.join(' '))}
 ids.forEach(function(k){document.getElementById(k).addEventListener('input',calc)});
-calc();
+restore();calc();
 document.getElementById('copy').addEventListener('click',function(){
 var b=this,t=last.length?last.join('\n'):'Нет данных для расчёта';
-function done(){b.textContent='Скопировано';setTimeout(function(){b.textContent='Копировать результат'},1500)}
+function done(){try{tg.HapticFeedback.notificationOccurred('success')}catch(e){}b.textContent='Скопировано';setTimeout(function(){b.textContent='Копировать результат'},1500)}
 try{navigator.clipboard.writeText(t).then(done,function(){fb()})}catch(e){fb()}
 function fb(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');done()}catch(e){}document.body.removeChild(a)}});
+document.getElementById('clear').addEventListener('click',function(){try{tg.HapticFeedback.impactOccurred('light')}catch(e){}ids.forEach(function(k){document.getElementById(k).value=''});calc();try{localStorage.removeItem('smmcalc.v1')}catch(e){}});
 var tg=window.Telegram&&window.Telegram.WebApp;
-if(tg){try{tg.ready();tg.expand();tg.setHeaderColor('#05070f');tg.setBackgroundColor('#05070f')}catch(e){}}
+if(tg){try{tg.ready();tg.expand();tg.setHeaderColor('#ebedf0');tg.setBackgroundColor('#ebedf0')}catch(e){}}
 </script>
 </body>
 </html>
